@@ -1,6 +1,6 @@
 import { test, expect } from '@playwright/test';// to import the test and expect functions from the playwright/test module
 
-test('Home page load with search box', async ({ page }) => {
+test('Home page loads with search box', async ({ page }) => {
     // to define a test case named "Home page load with search box" that takes a page object as an argument
 
     await page.goto('/');// to navigate to the base URL defined in the playwright.config.ts file
@@ -21,7 +21,7 @@ test('Search for a Keyword', async ({ page }) => {
 
     const results = await page.locator('[data-component-type="s-search-result"]'); 
     // to locate all the search result elements on the page that have the attribute data-component-type="s-search-result"
-    
+
     await expect(results.first()).toBeVisible(); // to check if the first search result is visible on the page
 
 });
