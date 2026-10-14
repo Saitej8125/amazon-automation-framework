@@ -11,6 +11,7 @@ export default defineConfig({
   use: {
     baseURL: 'https://www.amazon.in',
     headless: false,
+    actionTimeout: 15000,
     screenshot: 'on',
     video: 'on',
     trace: 'retain-on-failure',
