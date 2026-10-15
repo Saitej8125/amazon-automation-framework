@@ -1,0 +1,7 @@
+{
+  "validKeywords": ["laptop", "iphone", "headphones"],
+  "negative": {
+    "specialChars": "!@!$##$#%$^%&%&",
+    "gibberish": "nsmn sjd hf alsjfcs"
+  }
+}
