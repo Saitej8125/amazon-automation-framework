@@ -1,4 +1,5 @@
 import { BeforeAll, AfterAll, Before, After, Status, setDefaultTimeout } from '@cucumber/cucumber';
+import { SearchResultsPage } from '../pages/SearchResultsPage';
 import { chromium, Browser } from '@playwright/test';
 import { CustomWorld } from './world';
 import { HomePage } from '../pages/HomePage';
@@ -19,6 +20,7 @@ Before(async function (this: CustomWorld) {
   });
   this.page = await this.context.newPage();
   this.home = new HomePage(this.page);
+  this.results = new SearchResultsPage(this.page);
 });
 
 After(async function (this: CustomWorld, scenario) {
