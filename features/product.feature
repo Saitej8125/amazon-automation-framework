@@ -15,3 +15,10 @@ Feature: Product and cart
     When I open the first product
     Then the product title should be visible
     And the Add to Cart button should be visible
+
+    
+  @smoke @TC_CART_001
+  Scenario: Add a product to the cart
+    When I open the first product that can be added to the cart
+    And I add it to the cart
+    Then the cart count should be "1"

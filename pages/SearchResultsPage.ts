@@ -6,20 +6,44 @@ export class SearchResultsPage {
 
   constructor(page: Page) {
     this.page = page;
-    this.results = page.locator('[data-component-type="s-search-result"]'); // Locator for search result items
+    this.results = page.locator('[data-component-type="s-search-result"]');
   }
 
   // Product may open in the same tab or a new tab, so handle both
-  async openFirstProduct(): Promise<Page> { // promise<Page> is the return type, 
-  // indicating that this function returns a Promise that resolves to a Page object
-
-    const link = this.results.first().locator('a:has(h2)').first(); // Locator for the first product link
-    const [newPage] = await Promise.all([ // Wait for a new page to open, if it does
-      this.page.context().waitForEvent('page', { timeout: 5000 }).catch(() => null), // Wait for a new page to open, with a timeout of 5 seconds. If no new page opens, catch the error and return null
-      link.click(), // Click the first product link
+  async openFirstProduct(): Promise<Page> {
+    const link = this.results.first().locator('a:has(h2)').first();
+    const [newPage] = await Promise.all([
+      this.page.context().waitForEvent('page', { timeout: 5000 }).catch(() => null),
+      link.click(),
     ]);
-    const target = newPage ?? this.page; // If no new page opened, use the current page
-    await target.waitForLoadState('domcontentloaded'); // Wait for the target page to finish loading
-    return target; // Return the target page, which is either the new page or the current page
+    const target = newPage ?? this.page;
+    await target.waitForLoadState('domcontentloaded');
+    return target;
+  }
+
+  // Tries the first results in order and returns the first product that has Add to Cart
+  async openFirstProductWithAddToCart(maxTries = 5): Promise<Page> {
+    for (let i = 0; i < maxTries; i++) {
+      const link = this.results.nth(i).locator('a:has(h2)').first();
+      if ((await link.count()) === 0) continue;
+
+      const [newPage] = await Promise.all([
+        this.page.context().waitForEvent('page', { timeout: 5000 }).catch(() => null),
+        link.click(),
+      ]);
+      const target = newPage ?? this.page;
+      await target.waitForLoadState('domcontentloaded');
+
+      const hasButton = await target
+        .locator('#add-to-cart-button')
+        .waitFor({ state: 'visible', timeout: 5000 })
+        .then(() => true)
+        .catch(() => false);
+      if (hasButton) return target;
+
+      if (newPage) await newPage.close();
+      else await this.page.goBack();
+    }
+    throw new Error('No product with an Add to Cart button in the first results');
   }
 }
