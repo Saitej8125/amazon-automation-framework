@@ -3,6 +3,7 @@ import { BrowserContext, Page } from '@playwright/test';
 import { HomePage } from '../pages/HomePage';
 import { SearchResultsPage } from '../pages/SearchResultsPage';
 import { ProductPage } from '../pages/ProductPage';
+import { NavigationPage } from '../pages/NavigationPage';
 
 export class CustomWorld extends World {
   context!: BrowserContext;
@@ -10,6 +11,7 @@ export class CustomWorld extends World {
   home!: HomePage;
   results!: SearchResultsPage;
   product!: ProductPage;
+  nav!: NavigationPage;
 
   constructor(options: IWorldOptions) {
     super(options);
