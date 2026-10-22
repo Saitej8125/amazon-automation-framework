@@ -15,8 +15,15 @@ export class HomePage {
     this.accountMenu = page.locator('#nav-link-accountList');
   }
 
-  async open() {
+   async open() {
     await this.page.goto('/');
+    try {
+      await this.searchBox.waitFor({ state: 'visible', timeout: 10000 });
+    } catch {
+      throw new Error(
+        `Search box not found. Page title: "${await this.page.title()}" URL: ${this.page.url()}`
+      );
+    }
   }
 
   async searchByClick(keyword: string) {

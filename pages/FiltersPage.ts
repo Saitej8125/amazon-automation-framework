@@ -1,0 +1,38 @@
+import { Page, Locator } from '@playwright/test';
+
+export class FiltersPage {
+  readonly page: Page;
+  readonly brandPanel: Locator;
+  readonly sortSelect: Locator;
+  readonly organicResults: Locator;
+
+  constructor(page: Page) {
+    this.page = page;
+    this.brandPanel = page.locator('#brandsRefinements');
+    this.sortSelect = page.locator('#s-result-sort-select');
+    // results that are not marked Sponsored
+    this.organicResults = page
+      .locator('[data-component-type="s-search-result"]')
+      .filter({ hasNotText: /Sponsored/i });
+  }
+
+  async selectBrand(brand: string) {
+    await this.brandPanel.getByText(brand, { exact: true }).first().click();
+    await this.page.waitForLoadState('domcontentloaded');
+  }
+
+  async sortBy(value: string) {
+    await this.sortSelect.selectOption(value, { force: true });
+    await this.page.waitForLoadState('domcontentloaded');
+  }
+
+  async firstPrices(count: number): Promise<number[]> {
+    const texts = await this.organicResults
+      .locator('.a-price:not(.a-text-price) .a-offscreen')
+      .allTextContents();
+    return texts
+      .map((t) => Number(t.replace(/[^0-9.]/g, '')))
+      .filter((n) => n > 0)
+      .slice(0, count);
+  }
+}

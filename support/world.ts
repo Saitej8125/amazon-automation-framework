@@ -4,6 +4,7 @@ import { HomePage } from '../pages/HomePage';
 import { SearchResultsPage } from '../pages/SearchResultsPage';
 import { ProductPage } from '../pages/ProductPage';
 import { NavigationPage } from '../pages/NavigationPage';
+import { FiltersPage } from '../pages/FiltersPage';
 
 export class CustomWorld extends World {
   context!: BrowserContext;
@@ -12,6 +13,7 @@ export class CustomWorld extends World {
   results!: SearchResultsPage;
   product!: ProductPage;
   nav!: NavigationPage;
+  filters!: FiltersPage;
 
   constructor(options: IWorldOptions) {
     super(options);
