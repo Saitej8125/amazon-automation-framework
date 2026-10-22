@@ -21,8 +21,19 @@ export class FiltersPage {
     await this.page.waitForLoadState('domcontentloaded');
   }
 
-  async sortBy(value: string) {
-    await this.sortSelect.selectOption(value, { force: true });
+   // The real <select> is hidden, so use the visible dropdown like a user would
+  async sortBy(optionText: string) {
+    await this.page
+      .locator('.a-button-dropdown')
+      .filter({ hasText: /Sort by/i })
+      .first()
+      .click();
+    await this.page
+      .locator('a.a-dropdown-link')
+      .filter({ hasText: optionText })
+      .first()
+      .click();
+    await this.page.waitForURL(/[?&]s=/);
     await this.page.waitForLoadState('domcontentloaded');
   }
 
