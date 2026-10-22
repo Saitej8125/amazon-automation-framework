@@ -10,17 +10,21 @@ export class NavigationPage {
     this.page = page;
     this.accountMenu = page.locator('#nav-link-accountList');
     this.allMenu = page.locator('#nav-hamburger-menu');
-    this.drawer = page.locator('#hmenu-content');   // verify with codegen
+    this.drawer = page.getByRole('dialog').locator('#hmenu-content');
   }
 
   async hoverAccountMenu() {
     await this.accountMenu.hover();
   }
 
-  // hover first, then click a link inside the menu that appears
+  // The visible dropdown link has a real href; the hidden shortcut link uses javascript:void(0)
   async hoverAndSelect(linkName: string) {
     await this.accountMenu.hover();
-    await this.page.getByRole('link', { name: linkName }).first().click();
+    await this.page
+      .locator('a[href*="order-history"]')
+      .filter({ hasText: linkName })
+      .first()
+      .click();
   }
 
   async openAllMenu() {
@@ -28,8 +32,12 @@ export class NavigationPage {
     await this.drawer.waitFor({ state: 'visible' });
   }
 
-  // used for the main category and the sub-category (nested links)
+  // Click an item in the panel that is currently showing (main category or sub-category)
   async clickMenuItem(name: string) {
-    await this.drawer.getByText(name, { exact: true }).first().click();
+    await this.page
+      .locator('.hmenu-visible')
+      .getByText(name, { exact: true })
+      .first()
+      .click();
   }
 }
