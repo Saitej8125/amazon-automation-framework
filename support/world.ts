@@ -5,6 +5,7 @@ import { SearchResultsPage } from '../pages/SearchResultsPage';
 import { ProductPage } from '../pages/ProductPage';
 import { NavigationPage } from '../pages/NavigationPage';
 import { FiltersPage } from '../pages/FiltersPage';
+import { PracticePage } from '../pages/PracticePage';
 
 export class CustomWorld extends World {
   context!: BrowserContext;
@@ -14,6 +15,9 @@ export class CustomWorld extends World {
   product!: ProductPage;
   nav!: NavigationPage;
   filters!: FiltersPage;
+  practice!: PracticePage;
+  newWindow?: Page;
+  alertMessage = '';
 
   constructor(options: IWorldOptions) {
     super(options);

@@ -5,6 +5,7 @@ import { FiltersPage } from '../pages/FiltersPage';
 import { chromium, Browser } from '@playwright/test';
 import { CustomWorld } from './world';
 import { HomePage } from '../pages/HomePage';
+import { PracticePage } from '../pages/PracticePage';
 
 setDefaultTimeout(60 * 1000);
 
@@ -20,11 +21,11 @@ Before(async function (this: CustomWorld) {
     locale: 'en-IN',
     recordVideo: { dir: 'reports/videos' },
   });
-  this.page = await this.context.newPage();
   this.home = new HomePage(this.page);
+  this.results = new SearchResultsPage(this.page);
   this.nav = new NavigationPage(this.page);
   this.filters = new FiltersPage(this.page);
-  this.results = new SearchResultsPage(this.page);
+  this.practice = new PracticePage(this.page);
 });
 
 After(async function (this: CustomWorld, scenario) {
