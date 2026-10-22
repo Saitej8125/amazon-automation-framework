@@ -1,10 +1,10 @@
 import { BeforeAll, AfterAll, Before, After, Status, setDefaultTimeout } from '@cucumber/cucumber';
-import { SearchResultsPage } from '../pages/SearchResultsPage';
-import { NavigationPage } from '../pages/NavigationPage';
-import { FiltersPage } from '../pages/FiltersPage';
 import { chromium, Browser } from '@playwright/test';
 import { CustomWorld } from './world';
 import { HomePage } from '../pages/HomePage';
+import { SearchResultsPage } from '../pages/SearchResultsPage';
+import { NavigationPage } from '../pages/NavigationPage';
+import { FiltersPage } from '../pages/FiltersPage';
 import { PracticePage } from '../pages/PracticePage';
 
 setDefaultTimeout(60 * 1000);
@@ -21,6 +21,7 @@ Before(async function (this: CustomWorld) {
     locale: 'en-IN',
     recordVideo: { dir: 'reports/videos' },
   });
+  this.page = await this.context.newPage();          // must come before the lines below
   this.home = new HomePage(this.page);
   this.results = new SearchResultsPage(this.page);
   this.nav = new NavigationPage(this.page);
@@ -29,12 +30,16 @@ Before(async function (this: CustomWorld) {
 });
 
 After(async function (this: CustomWorld, scenario) {
-  if (scenario.result?.status === Status.FAILED) {
-    const screenshot = await this.page.screenshot();
-    this.attach(screenshot, 'image/png');
+  if (this.page) {
+    if (scenario.result?.status === Status.FAILED) {
+      const screenshot = await this.page.screenshot();
+      this.attach(screenshot, 'image/png');
+    }
+    await this.page.close();
   }
-  await this.page.close();
-  await this.context.close();
+  if (this.context) {
+    await this.context.close();
+  }
 });
 
 AfterAll(async function () {
