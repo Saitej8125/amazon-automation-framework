@@ -1,4 +1,4 @@
-@practice
+@practice @severity:minor
 Feature: Practice site actions
 
   Scenario: Tick and untick checkboxes

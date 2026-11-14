@@ -6,6 +6,7 @@ import { SearchResultsPage } from '../pages/SearchResultsPage';
 import { NavigationPage } from '../pages/NavigationPage';
 import { FiltersPage } from '../pages/FiltersPage';
 import { PracticePage } from '../pages/PracticePage';
+import * as fs from 'fs';
 
 setDefaultTimeout(60 * 1000);
 
@@ -28,8 +29,8 @@ Before(async function (this: CustomWorld) {
   this.filters = new FiltersPage(this.page);
   this.practice = new PracticePage(this.page);
 });
-
 After(async function (this: CustomWorld, scenario) {
+  const video = this.page ? this.page.video() : null;
   if (this.page) {
     if (scenario.result?.status === Status.FAILED) {
       const screenshot = await this.page.screenshot();
@@ -38,7 +39,13 @@ After(async function (this: CustomWorld, scenario) {
     await this.page.close();
   }
   if (this.context) {
-    await this.context.close();
+    await this.context.close();   // the video file is finished when the context closes
+  }
+  if (video) {
+    const videoPath = await video.path();
+    if (fs.existsSync(videoPath)) {
+      this.attach(fs.readFileSync(videoPath), 'video/webm');
+    }
   }
 });
 
