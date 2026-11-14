@@ -78,9 +78,9 @@ npx allure open allure-report
 
 ## Screenshots
 
-<!-- After adding the images to a docs/ folder, remove these comment markers. -->
+![CI run](docs/ci-run.png)
+
 <!-- ![Allure report](docs/allure-report.png) -->
-<!-- ![CI run](docs/ci-run.png) -->
 
 ## Author
 
