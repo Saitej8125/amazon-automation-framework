@@ -82,6 +82,8 @@ npx allure open allure-report
 
 ![Allure report](docs/allure-report.png)
 
+![Allure scenario with video](docs/allure-scenario.png)
+
 ## Author
 
 Sai Teja Pasthula, QA Automation Engineer
