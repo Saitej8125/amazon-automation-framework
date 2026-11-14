@@ -4,13 +4,13 @@ export class NavigationPage {
   readonly page: Page;
   readonly accountMenu: Locator;
   readonly allMenu: Locator;
-  readonly drawer: Locator;
+  readonly openPanel: Locator;
 
   constructor(page: Page) {
     this.page = page;
     this.accountMenu = page.locator('#nav-link-accountList');
     this.allMenu = page.locator('#nav-hamburger-menu');
-    this.drawer = page.getByRole('dialog').locator('#hmenu-content');
+    this.openPanel = page.locator('.hmenu-visible').first();
   }
 
   async hoverAccountMenu() {
@@ -18,26 +18,41 @@ export class NavigationPage {
   }
 
   // The visible dropdown link has a real href; the hidden shortcut link uses javascript:void(0)
-  async hoverAndSelect(linkName: string) {
-    await this.accountMenu.hover();
-    await this.page
-      .locator('a[href*="order-history"]')
+   async hoverAndSelect(linkName: string) {
+    const link = this.page
+      .locator('a[href*="order-history"]:visible')
       .filter({ hasText: linkName })
-      .first()
-      .click();
+      .first();
+    for (let attempt = 1; attempt <= 3; attempt++) {
+      await this.page.mouse.move(0, 300);          // move away so the hover starts fresh
+      await this.accountMenu.hover();
+      try {
+        await link.waitFor({ state: 'visible', timeout: 5000 });
+        await link.click();
+        return;
+      } catch {
+        console.log(`Account menu link not visible on attempt ${attempt}`);
+      }
+    }
+    throw new Error(`"${linkName}" link did not appear in the account menu`);
   }
 
+  // Click the All icon; if the panel does not open, try once more
   async openAllMenu() {
-    await this.allMenu.click();
-    await this.drawer.waitFor({ state: 'visible' });
+    for (let attempt = 1; attempt <= 2; attempt++) {
+      await this.allMenu.click();
+      try {
+        await this.openPanel.waitFor({ state: 'visible', timeout: 10000 });
+        return;
+      } catch {
+        console.log(`All menu did not open on attempt ${attempt}`);
+      }
+    }
+    throw new Error('All menu did not open after 2 attempts');
   }
 
   // Click an item in the panel that is currently showing (main category or sub-category)
   async clickMenuItem(name: string) {
-    await this.page
-      .locator('.hmenu-visible')
-      .getByText(name, { exact: true })
-      .first()
-      .click();
+    await this.openPanel.getByText(name, { exact: true }).first().click();
   }
 }

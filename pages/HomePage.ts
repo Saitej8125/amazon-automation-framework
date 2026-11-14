@@ -15,15 +15,23 @@ export class HomePage {
     this.accountMenu = page.locator('#nav-link-accountList');
   }
 
-   async open() {
+   async open() { 
+
     await this.page.goto('/');
-    try {
-      await this.searchBox.waitFor({ state: 'visible', timeout: 10000 });
-    } catch {
-      throw new Error(
-        `Search box not found. Page title: "${await this.page.title()}" URL: ${this.page.url()}`
-      );
+    for (let attempt = 1; attempt <= 2; attempt++) {
+      try {
+        await this.searchBox.waitFor({ state: 'visible', timeout: 10000 });
+        return;
+      } catch {
+        if (attempt === 1) {
+          console.log(`Search box missing (title: "${await this.page.title()}"), reloading once`);
+          await this.page.reload();
+        }
+      }
     }
+    throw new Error(
+      `Search box not found. Page title: "${await this.page.title()}" URL: ${this.page.url()}`
+    );
   }
 
   async searchByClick(keyword: string) {
