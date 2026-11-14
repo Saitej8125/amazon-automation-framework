@@ -13,7 +13,10 @@ setDefaultTimeout(60 * 1000);
 let browser: Browser;
 
 BeforeAll(async function () {
-  browser = await chromium.launch({ headless: false, slowMo: 300 });
+  browser = await chromium.launch({
+    headless: !!process.env.CI,
+    slowMo: process.env.CI ? 0 : 300,
+  });
 });
 
 Before(async function (this: CustomWorld) {
