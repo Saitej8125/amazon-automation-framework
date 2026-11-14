@@ -80,7 +80,7 @@ npx allure open allure-report
 
 ![CI run](docs/ci-run.png)
 
-<!-- ![Allure report](docs/allure-report.png) -->
+![Allure report](docs/allure-report.png)
 
 ## Author
 
