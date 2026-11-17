@@ -69,7 +69,7 @@ export class PracticePage {
   }
 
     // ---- hover ----
-  async openHover() { await this.go('/hover'); }
+  async openHover() { await this.go('/hovers'); }
   avatar(n: number): Locator { return this.page.locator('.figure').nth(n - 1); }
 
   // ---- key presses and slider ----
