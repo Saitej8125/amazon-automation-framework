@@ -11,7 +11,7 @@ A test automation project built to practise the full QA workflow on a real e-com
 | Area | What is included |
 |---|---|
 | Test design | 116 test cases across 10 modules in Excel, with priority, severity, test type (smoke, sanity, regression, functional, negative, exploratory, retesting), a summary dashboard and a defect log |
-| Automation | 24 Cucumber scenarios: home, search (including a Scenario Outline and negative cases), product, cart, navigation (hover, hover and select, nested menu), filters (multi-select, sorting), and a practice-site module |
+| Automation | 29 Cucumber scenarios: home, search (including a Scenario Outline and negative cases), product, cart, navigation (hover, hover and select, nested menu), filters (multi-select, sorting), and a practice-site module |
 | Web actions | XPath, CSS and `getBy*` locators, keyboard and mouse actions, hover, checkboxes, dropdowns, multi-select, new tabs and windows, frames and nested frames, alerts, right-click, drag and drop |
 | Reporting | Allure report with step details, severity labels, a screenshot on failure and a video of every scenario |
 | CI | GitHub Actions runs the stable practice-site scenarios on every push |
