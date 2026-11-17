@@ -100,3 +100,61 @@ Then('the alert message should be {string}',
   async function (this: CustomWorld, text: string) {
     expect(this.alertMessage).toBe(text);
   });
+
+Given('I open the hover practice page', async function (this: CustomWorld) {
+  await this.practice.openHover();
+});
+
+When('I hover over avatar {int}', async function (this: CustomWorld, n: number) {
+  await this.practice.avatar(n).hover();
+});
+
+Then('the caption {string} should be visible',
+  async function (this: CustomWorld, text: string) {
+    await expect(this.page.getByText(text).first()).toBeVisible();
+  });
+
+When('I click View profile for avatar {int}', async function (this: CustomWorld, n: number) {
+  await this.practice.avatar(n).getByRole('link', { name: 'View profile' }).click();
+});
+
+Then('I should be on the page for user {int}', async function (this: CustomWorld, n: number) {
+  await expect(this.page).toHaveURL(new RegExp(`/users/${n}`));
+});
+
+Given('I open the key press practice page', async function (this: CustomWorld) {
+  await this.practice.openKeyPresses();
+});
+
+When('I press the key {string}', async function (this: CustomWorld, key: string) {
+  await this.practice.pressKey(key);
+});
+
+Given('I open the slider practice page', async function (this: CustomWorld) {
+  await this.practice.openSlider();
+});
+
+When('I press the right arrow {int} times on the slider',
+  async function (this: CustomWorld, times: number) {
+    await this.practice.moveSliderRight(times);
+  });
+
+Then('the slider value should be {string}',
+  async function (this: CustomWorld, value: string) {
+    await expect(this.practice.sliderValue()).toHaveText(value);
+  });
+
+Given('I open the infinite scroll practice page', async function (this: CustomWorld) {
+  await this.practice.openInfiniteScroll();
+});
+
+When('I scroll down', async function (this: CustomWorld) {
+  this.blocksBefore = await this.practice.scrollBlocks().count();
+  await this.practice.scrollDown();
+});
+
+Then('more content should be loaded', async function (this: CustomWorld) {
+  await expect
+    .poll(async () => await this.practice.scrollBlocks().count())
+    .toBeGreaterThan(this.blocksBefore);
+});

@@ -67,4 +67,30 @@ export class PracticePage {
     await this.page.locator('#hot-spot').click({ button: 'right' });
     return message;
   }
+
+    // ---- hover ----
+  async openHover() { await this.go('/hover'); }
+  avatar(n: number): Locator { return this.page.locator('.figure').nth(n - 1); }
+
+  // ---- key presses and slider ----
+  async openKeyPresses() { await this.go('/key_presses'); }
+  async pressKey(key: string) {
+    await this.page.locator('#target').click();
+    await this.page.keyboard.press(key);
+  }
+
+  async openSlider() { await this.go('/horizontal_slider'); }
+  async moveSliderRight(times: number) {
+    const slider = this.page.locator('input[type="range"]');
+    await slider.focus();
+    for (let i = 0; i < times; i++) {
+      await slider.press('ArrowRight');
+    }
+  }
+  sliderValue(): Locator { return this.page.locator('#range'); }
+
+  // ---- infinite scroll ----
+  async openInfiniteScroll() { await this.go('/infinite_scroll'); }
+  scrollBlocks(): Locator { return this.page.locator('.jscroll-added'); }
+  async scrollDown() { await this.page.mouse.wheel(0, 3000); }
 }

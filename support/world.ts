@@ -18,6 +18,7 @@ export class CustomWorld extends World {
   practice!: PracticePage;
   newWindow?: Page;
   alertMessage = '';
+  blocksBefore = 0;
 
   constructor(options: IWorldOptions) {
     super(options);

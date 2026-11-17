@@ -44,3 +44,35 @@ Feature: Practice site actions
     Given I open the context menu practice page
     When I right-click the box
     Then the alert message should be "You selected a context menu"
+
+    
+  @hover
+  Scenario: Hover over an avatar shows its caption
+    Given I open the hover practice page
+    When I hover over avatar 1
+    Then the caption "name: user1" should be visible
+
+  @hover
+  Scenario: Hover and select View profile
+    Given I open the hover practice page
+    When I hover over avatar 1
+    And I click View profile for avatar 1
+    Then I should be on the page for user 1
+
+  @keyboard
+  Scenario: Key press is detected
+    Given I open the key press practice page
+    When I press the key "A"
+    Then the result should say "You entered: A"
+
+  @slider
+  Scenario: Move the slider with the arrow keys
+    Given I open the slider practice page
+    When I press the right arrow 5 times on the slider
+    Then the slider value should be "2.5"
+
+  @scroll
+  Scenario: Scrolling loads more content
+    Given I open the infinite scroll practice page
+    When I scroll down
+    Then more content should be loaded
