@@ -21,8 +21,8 @@ jobs:
 
       - run: npx playwright install --with-deps chromium
 
-      - name: Run stable practice-site tests
-        run: npx cucumber-js --tags "@practice"
+      - name: Run stable tests (practice site and API)
+        run: npx cucumber-js --tags "@practice or @api"
         env:
           CI: 'true'
 
