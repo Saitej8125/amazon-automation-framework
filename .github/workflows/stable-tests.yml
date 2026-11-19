@@ -7,8 +7,12 @@ on:
   workflow_dispatch:
 
 jobs:
-  practice-tests:
+  stable-tests:
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        browser: [chromium, firefox]
     steps:
       - uses: actions/checkout@v4
 
@@ -19,12 +23,13 @@ jobs:
 
       - run: npm ci
 
-      - run: npx playwright install --with-deps chromium
+      - run: npx playwright install --with-deps ${{ matrix.browser }}
 
       - name: Run stable tests (practice site and API)
         run: npx cucumber-js --tags "@practice or @api"
         env:
           CI: 'true'
+          BROWSER: ${{ matrix.browser }}
 
       - name: Build Allure report
         if: always()
@@ -34,7 +39,7 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: allure-report
+          name: allure-report-${{ matrix.browser }}
           path: |
             allure-report
             allure-results

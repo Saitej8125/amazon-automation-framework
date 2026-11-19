@@ -1,5 +1,6 @@
 import { BeforeAll, AfterAll, Before, After, Status, setDefaultTimeout } from '@cucumber/cucumber';
-import { chromium, Browser } from '@playwright/test';
+import { chromium, firefox, Browser } from '@playwright/test';
+import * as fs from 'fs';
 import { CustomWorld } from './world';
 import { HomePage } from '../pages/HomePage';
 import { SearchResultsPage } from '../pages/SearchResultsPage';
@@ -7,14 +8,14 @@ import { NavigationPage } from '../pages/NavigationPage';
 import { FiltersPage } from '../pages/FiltersPage';
 import { PracticePage } from '../pages/PracticePage';
 import { LoginPage } from '../pages/LoginPage';
-import * as fs from 'fs';
 
 setDefaultTimeout(60 * 1000);
 
 let browser: Browser;
 
 BeforeAll(async function () {
-  browser = await chromium.launch({
+  const browserType = process.env.BROWSER === 'firefox' ? firefox : chromium;
+  browser = await browserType.launch({
     headless: !!process.env.CI,
     slowMo: process.env.CI ? 0 : 300,
   });
@@ -34,6 +35,7 @@ Before(async function (this: CustomWorld) {
   this.practice = new PracticePage(this.page);
   this.login = new LoginPage(this.page);
 });
+
 After(async function (this: CustomWorld, scenario) {
   const video = this.page ? this.page.video() : null;
   if (this.page) {
