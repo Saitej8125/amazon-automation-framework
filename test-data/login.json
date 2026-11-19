@@ -1,0 +1,4 @@
+{
+  "invalidEmail": "abc@@mail",
+  "unregisteredEmail": "no.such.user.12345@example.invalid"
+}

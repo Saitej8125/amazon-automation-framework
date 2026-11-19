@@ -15,8 +15,7 @@ export class HomePage {
     this.accountMenu = page.locator('#nav-link-accountList');
   }
 
-   async open() { 
-
+  async open() {
     await this.page.goto('/');
     for (let attempt = 1; attempt <= 2; attempt++) {
       try {
@@ -29,6 +28,7 @@ export class HomePage {
         }
       }
     }
+    await this.page.screenshot({ path: 'reports/bare-home-page.png', fullPage: true });
     throw new Error(
       `Search box not found. Page title: "${await this.page.title()}" URL: ${this.page.url()}`
     );

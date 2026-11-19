@@ -6,6 +6,7 @@ import { SearchResultsPage } from '../pages/SearchResultsPage';
 import { NavigationPage } from '../pages/NavigationPage';
 import { FiltersPage } from '../pages/FiltersPage';
 import { PracticePage } from '../pages/PracticePage';
+import { LoginPage } from '../pages/LoginPage';
 import * as fs from 'fs';
 
 setDefaultTimeout(60 * 1000);
@@ -31,6 +32,7 @@ Before(async function (this: CustomWorld) {
   this.nav = new NavigationPage(this.page);
   this.filters = new FiltersPage(this.page);
   this.practice = new PracticePage(this.page);
+  this.login = new LoginPage(this.page);
 });
 After(async function (this: CustomWorld, scenario) {
   const video = this.page ? this.page.video() : null;
